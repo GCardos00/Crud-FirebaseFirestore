@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.firebasefirestore.ui.theme.FirebasefirestoreTheme
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -40,6 +41,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val auth = com.google.firebase.Firebase.auth
+
+        Log.i(TAG, "onCreate usuário atual: ${auth.currentUser}")
+
+        auth.createUserWithEmailAndPassword(
+            "123@gmail.com",
+            "123456789"
+        ).addOnCompleteListener{ task ->
+            if(task.isSuccessful){
+                Log.i(TAG,"onCreate: Sucesso")
+            }else{
+                Log.i(TAG,"onCreate: Falha -> ${task.exception}")
+            }
+        }
+        
         db = Firebase.firestore // Inicializa o Firestore
         setContent {
             FirebasefirestoreTheme {
